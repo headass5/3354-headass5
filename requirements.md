@@ -5,4 +5,4 @@
 
 ## Use Case Diagram
 ![Placeholder image of Use Case Diagram]
-(https://placehold.it/400)
+(https://placehold.it/400.png)
