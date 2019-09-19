@@ -1,6 +1,9 @@
 # Software Requirements for PenPals
 
 ## Definitions, Acronyms, and Abbreviations
+SMS: Short Message Service \
+MMS: Multimedia Messaging Service
+<br>
 
 ## Functional Requirements
 1. The System will allow users to send messages in a 1:1 conversation
@@ -14,8 +17,7 @@
 3. The System will allow users to view all their conversations
     * 3.1. The user will be able to view a list of all their conversations and click on certain ones.
     * 3.2. The user will be able to delete certain conversations.
-
+<br>
 
 ## Use Case Diagram
 ![Placeholder image of Use Case Diagram]
-
