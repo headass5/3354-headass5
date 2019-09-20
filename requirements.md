@@ -17,7 +17,10 @@ MMS: Multimedia Messaging Service
 3. The System will allow users to view all their conversations
     * 3.1. The user will be able to view a list of all their conversations and click on certain ones.
     * 3.2. The user will be able to delete certain conversations.
+4. The System will allow users to create account
+	* 4.1. The system will authorize users credentials
+	* 4.2. The system will be able to manage the user’s information
 
 
 ## Use Case Diagram
-![Placeholder image of Use Case Diagram]
+![](use-case.png)
