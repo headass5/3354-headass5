@@ -27,6 +27,7 @@ MMS: Multimedia Messaging Service
 5. The System will allow users to create account
 	* 5.1. The system will authorize users credentials
 	* 5.2. The system will be able to manage the user’s information
+	* 5.3. The system will be able to delete the user's information
 
 
 ## Non-functional Requirements
@@ -34,7 +35,7 @@ MMS: Multimedia Messaging Service
    * 1.1. The app will be responsive and attempt to avoid slow loads
    
 2. Aesthetics
-   * 2.1. The app's UI will be clean and clear.
+   * 2.1. The app's UI will be clean and clear, user friendly
    * 2.2. A good color scheme will be presented to make the app appealing to potential users.
 
 ## Constraints
