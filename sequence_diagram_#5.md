@@ -1,0 +1,1 @@
+# Andrea - Scenario 5: The user will be able to delete certain conversations.
