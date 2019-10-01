@@ -13,4 +13,4 @@
 - ChatAPI
 
 ## Class Diagram
-![](class_diagram.png)
+![](/images/class_diagram.jpg)

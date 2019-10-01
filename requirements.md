@@ -46,4 +46,4 @@ MMS: Multimedia Messaging Service
    * 1.1. The `master` branch will be protected and changes will require at least 1 approving review to be able to merge
 
 ## Use Case Diagram
-![The Use Case Diagram](use-case.png)
+![The Use Case Diagram](/images/use-case.png)
