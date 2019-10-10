@@ -1,28 +1,40 @@
 package com.aahlad.thismessagingservice;
 
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 public class Conversations extends AppCompatActivity {
+  private FirebaseAuth auth = FirebaseAuth.getInstance();
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_conversations);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
+    FloatingActionButton fab = findViewById(R.id.fab);
+    
+    // Fab should probably be used to create a conversation eventually
+    View.OnClickListener fabListener = new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
+        if (auth.getCurrentUser() != null) {
+          // Showing current user's email as placeholder for
+          // loading their conversations from the database
+          Snackbar.make(view, Objects.requireNonNull(auth.getCurrentUser().getEmail()), Snackbar.LENGTH_LONG)
+              .show();
+        }
       }
-    });
+    };
+    
+    fab.setOnClickListener(fabListener);
   }
 }
