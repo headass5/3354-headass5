@@ -30,27 +30,28 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
   
+    final FirebaseUser user = auth.getCurrentUser();
+    final Intent sendToConversations = new Intent(getBaseContext(), Conversations.class);
+  
+    // Check if user is already logged in and redirect to conversations list
+    if (user != null) {
+      startActivity(sendToConversations);
+      finish();
+    }
+    
     setContentView(R.layout.activity_main);
   
     loginButton = findViewById(R.id.login_button);
     emailField = findViewById(R.id.login_email_field);
     passwordField = findViewById(R.id.login_password_field);
-  
-    final Intent sendToConversations = new Intent(getBaseContext(), Conversations.class);
-    final FirebaseUser user = auth.getCurrentUser();
     
-    // Check if user is already logged in and redirect to conversations list
-    // TODO: Disable the ability for the user to click back button and go to login screen
-    if (user != null) {
-      startActivity(sendToConversations);
-    }
-  
-    // This is called the firebase auth network work is complete.
+    // This is called when the firebase auth network work is complete.
     final OnCompleteListener<AuthResult> firebaseAuthCompleteListener = new OnCompleteListener<AuthResult>() {
       @Override
       public void onComplete(@NonNull Task<AuthResult> task) {
         if (task.isSuccessful()) {
           startActivity(sendToConversations);
+          finish();
         } else {
           notifyAuthFail();
         }
