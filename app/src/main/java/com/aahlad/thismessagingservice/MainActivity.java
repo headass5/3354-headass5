@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
   Button loginButton;
+  Button registerButton;
   TextView emailField;
   TextView passwordField;
   
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
   
     loginButton = findViewById(R.id.login_button);
+    registerButton = findViewById(R.id.register_button);
     emailField = findViewById(R.id.login_email_field);
     passwordField = findViewById(R.id.login_password_field);
     
