@@ -74,7 +74,17 @@ public class MainActivity extends AppCompatActivity {
         }
       }
     };
-    
+
     loginButton.setOnClickListener(loginClickListener);
+
+    View.OnClickListener registerClickListener = new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Toast.makeText(getApplicationContext(), "Button Clicked.",
+                Toast.LENGTH_SHORT).show();
+      }
+    };
+    registerButton.setOnClickListener(registerClickListener);
   }
 }
+
