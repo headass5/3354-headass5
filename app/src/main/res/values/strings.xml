@@ -4,6 +4,7 @@
   <string name="log_in">Log in</string>
   <string name="email_prompt">Enter your email</string>
   <string name="password_prompt">Enter your password</string>
+  <string name="confirm_password">Confirm Password</string>
   <string name="title_activity_conversations">Conversations</string>
   <string name="large_text">
     "Material is the metaphor.\n\n"

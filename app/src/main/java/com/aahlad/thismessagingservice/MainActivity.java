@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
   
     final FirebaseUser user = auth.getCurrentUser();
     final Intent sendToConversations = new Intent(getBaseContext(), Conversations.class);
-  
+    final Intent sendToRegister = new Intent(getBaseContext(), RegisterActivity.class);
+
     // Check if user is already logged in and redirect to conversations list
     if (user != null) {
       startActivity(sendToConversations);
@@ -80,8 +81,10 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener registerClickListener = new View.OnClickListener() {
       @Override
       public void onClick(View view) {
+        startActivity(sendToRegister);
         Toast.makeText(getApplicationContext(), "Button Clicked.",
                 Toast.LENGTH_SHORT).show();
+
       }
     };
     registerButton.setOnClickListener(registerClickListener);
