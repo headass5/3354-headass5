@@ -13,6 +13,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
   Button loginButton;
@@ -47,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
     registerButton = findViewById(R.id.register_button);
     emailField = findViewById(R.id.login_email_field);
     passwordField = findViewById(R.id.login_password_field);
+
+
     
     // This is called when the firebase auth network work is complete.
     final OnCompleteListener<AuthResult> firebaseAuthCompleteListener = new OnCompleteListener<AuthResult>() {
       @Override
       public void onComplete(@NonNull Task<AuthResult> task) {
         if (task.isSuccessful()) {
+
           startActivity(sendToConversations);
           finish();
         } else {
