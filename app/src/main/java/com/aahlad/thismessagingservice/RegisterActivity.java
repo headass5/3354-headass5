@@ -2,6 +2,7 @@ package com.aahlad.thismessagingservice;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     setContentView(R.layout.activity_register);
 
     username = findViewById(R.id.username);
+
     email = findViewById(R.id.register_email_field);
     password = findViewById(R.id.register_password_field);
     confirmPassword = findViewById(R.id.register_confirm_password_field);
