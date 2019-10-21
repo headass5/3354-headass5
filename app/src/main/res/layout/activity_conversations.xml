@@ -17,24 +17,7 @@
       android:layout_height="wrap_content"
       android:background="@color/colorPrimary"
       app:popupTheme="@style/MenuStyle"
-      app:titleTextColor="@android:color/primary_text_dark">
-
-      <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
-
-      <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginLeft="25dp"
-        android:textColor="#fff"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
+      app:titleTextColor="@android:color/primary_text_dark"/>
 
     <com.google.android.material.tabs.TabLayout
       android:id="@+id/tab_layout"
