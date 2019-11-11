@@ -1,8 +1,10 @@
 package com.aahlad.thismessagingservice.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aahlad.thismessagingservice.Adapter.UserAdapter;
+import com.aahlad.thismessagingservice.AddContact;
 import com.aahlad.thismessagingservice.Constants;
 import com.aahlad.thismessagingservice.Model.User;
 import com.aahlad.thismessagingservice.R;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,11 +34,24 @@ public class UsersFragment extends Fragment {
   private LoadContactHandler loadHandler;
   private View view;
   private ArrayList<User> mUsers;
-  
+
+  FloatingActionButton addContactButton;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_users, container, false);
     spinner = view.findViewById(R.id.contact_load_spinner);
+
+
+    addContactButton = view.findViewById(R.id.new_contact_button);
+    addContactButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        System.out.println("Click button to add Contact");
+        Intent sendToAddContact = new Intent(getContext(), AddContact.class);
+        startActivity(sendToAddContact);
+      }
+    });
     
     final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     mUsers = new ArrayList<>();
