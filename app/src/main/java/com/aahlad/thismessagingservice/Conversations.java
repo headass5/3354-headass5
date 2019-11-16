@@ -30,11 +30,16 @@ public class Conversations extends AppCompatActivity {
     setContentView(R.layout.activity_conversations);
 
     Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setTitle("This Messaging Service");
-    setSupportActionBar(toolbar);
-    
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+    String userName = firebaseUser.getDisplayName();
+    if (userName.isEmpty()) {
+      toolbar.setTitle("Hello!");
+    } else {
+      toolbar.setTitle("Hello " + userName + "!");
+    }
+    
+    setSupportActionBar(toolbar);
+  
     TabLayout tabLayout = findViewById(R.id.tab_layout);
     ViewPager viewPager = findViewById(R.id.view_pager);
 

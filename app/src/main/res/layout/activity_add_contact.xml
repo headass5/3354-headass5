@@ -17,20 +17,19 @@
 
         android:layout_marginTop="16dp"
         android:text="Create Contact"
-        app:layout_constraintEnd_toEndOf="@+id/new_contact_email"
-        app:layout_constraintTop_toBottomOf="@+id/new_contact_email"
+        app:layout_constraintEnd_toEndOf="@+id/new_contact_username"
+        app:layout_constraintTop_toBottomOf="@+id/new_contact_username"
         tools:text="@string/create_contact" />
 
-    <EditText
-        android:id="@+id/new_contact_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="256dp"
-        android:ems="10"
-        android:hint="@string/contact_email"
-        android:inputType="textEmailAddress"
-        android:text="@string/contact_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+  <EditText
+    android:id="@+id/new_contact_username"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="256dp"
+    android:ems="10"
+    android:hint="@string/contact_email"
+    android:inputType="textEmailAddress"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
