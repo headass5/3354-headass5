@@ -42,7 +42,8 @@ public class CreateConvoActivity extends AppCompatActivity {
            @Override
            public void run() {
                try{
-                   String currentUser = auth.getCurrentUser().getUid();
+                   String currentUserId = auth.getCurrentUser().getUid();
+                   String currentUserName = auth.getCurrentUser().getDisplayName();
 
                    QuerySnapshot otherUser = Tasks.await(db.collection(Constants.USER_META_PATH)
                            .whereEqualTo("username", username)
@@ -60,10 +61,10 @@ public class CreateConvoActivity extends AppCompatActivity {
 
                    Map<String, Object> data = new HashMap<>();
                    List<String> users = new ArrayList<>();
-                   users.add(currentUser);
+                   users.add(currentUserId);
                    users.add(otherDocument.getId());
 
-                   data.put("title", currentUser + "&" + otherUser);
+                   data.put("title", currentUserName + " & " + otherDocument.get("username"));
                    data.put("users", users);
 
                    Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).add(data));
