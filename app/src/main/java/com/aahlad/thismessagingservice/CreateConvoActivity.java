@@ -13,11 +13,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -52,11 +55,16 @@ public class CreateConvoActivity extends AppCompatActivity {
                        finish();
                        return;
                    }
-                   //String otherUserId = otherUser.getDocuments().get(0).getId();
+                   DocumentSnapshot otherDocument = otherUser.getDocuments().get(0);
+
 
                    Map<String, Object> data = new HashMap<>();
+                   List<String> users = new ArrayList<>();
+                   users.add(currentUser);
+                   users.add(otherDocument.getId());
+
                    data.put("title", currentUser + "&" + otherUser);
-                   data.put("users", new String[]{currentUser, otherUser.toString()});
+                   data.put("users", users);
 
                    Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).add(data));
                    addHandler.sendEmptyMessage(0);
