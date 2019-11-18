@@ -10,18 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
@@ -31,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 public class CreateConvoActivity extends AppCompatActivity {
     Button sendButton;
-    TextView emailField;
+    TextView textField;
     TextView convoBody;
     UserEmailHandler addHandler = new UserEmailHandler(this);
     Date date = new Date();
@@ -42,26 +34,40 @@ public class CreateConvoActivity extends AppCompatActivity {
     /*private boolean checkIfUserExist(String text) {
     }*/
 
-    private void addMessage(String text, String email){
-        Map<String, Object> message = new HashMap<>();
-        message.put("body", text);
-        message.put("userID", auth.getCurrentUser().getUid());
-        message.put("time_sent", date.getTime());
+    private void addMessage(String text, final String username){
+       Thread addConvo = new Thread(new Runnable() {
+           @Override
+           public void run() {
+               try{
+                   String currentUser = auth.getCurrentUser().getUid();
 
-        db.collection(Constants.MESSAGES_PATH)
-                .add(message)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        addHandler.sendEmptyMessage(0);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        addHandler.sendEmptyMessage(1);
-                    }
-                });
+                   QuerySnapshot otherUser = Tasks.await(db.collection(Constants.USER_META_PATH)
+                           .whereEqualTo("username", username)
+                           .get());
+
+                   if (otherUser.isEmpty()) {
+                       System.out.println("Here is the username");
+                       System.out.println(username);
+                       addHandler.sendEmptyMessage(1);
+                       finish();
+                       return;
+                   }
+                   //String otherUserId = otherUser.getDocuments().get(0).getId();
+
+                   Map<String, Object> data = new HashMap<>();
+                   data.put("title", currentUser + "&" + otherUser);
+                   data.put("users", new String[]{currentUser, otherUser.toString()});
+
+                   Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).add(data));
+                   addHandler.sendEmptyMessage(0);
+                   finish();
+
+               }catch (InterruptedException | ExecutionException e) {
+                   System.out.println("Create Contact exception");
+               }
+           }
+       });
+       addConvo.start();
     }
 
 
@@ -71,29 +77,25 @@ public class CreateConvoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_convo);
 
         final Intent sendToConversation = new Intent(getBaseContext(), Conversations.class);
-        final Intent sendToMessage = new Intent(getBaseContext(), Conversations.class);
+        final Intent sendToMessage = new Intent(getBaseContext(), RegisterActivity.class);
 
         sendButton = findViewById(R.id.send_button);
-        emailField = findViewById(R.id.recipients_email_field);
+        textField = findViewById(R.id.recipients_username);
         convoBody = findViewById(R.id.convo_body);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String enteredEmail = emailField.getText().toString();
+                String enteredUser = textField.getText().toString();
                 String enteredText = convoBody.getText().toString();
-
-                //if (!enteredEmail.equals("")) {
-                    //boolean a = checkIfUserExist(enteredEmail);
-                    //if(true == true) {
-                        addMessage(enteredText, enteredEmail);
-                        startActivity(sendToConversation);
-                        finish();
-                    //}
-                /*} else {
-                    startActivity(sendToMessage);
+                if(enteredUser.isEmpty()){
+                    return;
+                }
+                else {
+                    addMessage(enteredText, enteredUser.trim());
+                    startActivity(sendToConversation);
                     finish();
-                }*/
+                }
             }
         });
     }

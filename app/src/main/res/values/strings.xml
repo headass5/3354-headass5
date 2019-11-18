@@ -103,4 +103,5 @@
     <string name="recipients_email">Recipients Email</string>
     <string name="edit_message">Enter a message</string>
     <string name="send">Send</string>
+    <string name="enter_username">Enter Username</string>
 </resources>
