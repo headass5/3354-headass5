@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,15 +33,50 @@ public class UsersFragment extends Fragment {
   private LoadContactHandler loadHandler;
   private View view;
   private ArrayList<User> mUsers;
-
-  FloatingActionButton addContactButton;
-
+  private FloatingActionButton addContactButton;
+  private final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+  
+  private Runnable loadContactsRun = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        DocumentSnapshot currentUserDoc = Tasks.await(db.collection(Constants.USER_META_PATH).document(currentUid).get(Source.SERVER));
+        assert currentUserDoc != null;
+        
+        Map<String, Object> data = currentUserDoc.getData();
+        assert data != null;
+        
+        if (!data.containsKey("contacts")) {
+          System.out.println("Doesn't contain contacts");
+          loadHandler.sendEmptyMessage(0);
+        }
+        
+        ArrayList<String> contacts = (ArrayList<String>) data.get("contacts");
+        mUsers.clear();
+        
+        for (final String s : contacts) {
+          DocumentSnapshot user = Tasks.await(db.collection(Constants.USER_META_PATH).document(s).get());
+          
+          assert user != null;
+          User contact = user.toObject(User.class);
+          System.out.println("Adding user");
+          mUsers.add(contact);
+        }
+        
+        loadHandler.sendEmptyMessage(0);
+        
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  };
+  
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_users, container, false);
     spinner = view.findViewById(R.id.contact_load_spinner);
-
-
+    spinner.setVisibility(View.VISIBLE);
+    
     addContactButton = view.findViewById(R.id.new_contact_button);
     addContactButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -53,48 +87,17 @@ public class UsersFragment extends Fragment {
       }
     });
     
-    final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     mUsers = new ArrayList<>();
   
-    // loadHandler will get a message from background thread,
-    // then populate the recyclerView and hide Spinner
     loadHandler = new LoadContactHandler(this);
-    
-    // Create a new thread which handles loading contact list and each contact's info from FireStore
-    Thread loadContacts = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          DocumentSnapshot currentUserDoc = Tasks.await(db.collection(Constants.USER_META_PATH).document(currentUid).get(Source.SERVER));
-          assert currentUserDoc != null;
-        
-          Map<String, Object> data = currentUserDoc.getData();
-          assert data != null;
-        
-          if (!data.containsKey("contacts")) {
-            System.out.println("Doesn't contain contacts");
-            loadHandler.sendEmptyMessage(0);
-          }
-        
-          ArrayList<String> contacts = (ArrayList<String>) data.get("contacts");
-          
-          for (final String s : contacts) {
-            DocumentSnapshot user = Tasks.await(db.collection(Constants.USER_META_PATH).document(s).get());
-          
-            assert user != null;
-            User contact = user.toObject(User.class);
-            mUsers.add(contact);
-          }
-          
-          loadHandler.sendEmptyMessage(0);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
-    loadContacts.start();
-    
     return view;
+  }
+  
+  @Override
+  public void onResume() {
+    super.onResume();
+    Thread loadContacts = new Thread(loadContactsRun);
+    loadContacts.start();
   }
   
   private static class LoadContactHandler extends Handler {
