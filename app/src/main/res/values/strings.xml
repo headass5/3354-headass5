@@ -3,6 +3,8 @@
     <string name="register_button_text">Register</string>
     <string name="log_in">Log in</string>
     <string name="email_prompt">Enter your email</string>
+    <string name="contact_email">Enter your email</string>
+    <string name="create_contact">Create Contact</string>
     <string name="password_prompt">Enter your password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="title_activity_conversations">Conversations</string>
