@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,10 +34,11 @@ public class CreateConvoActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
-    /*private boolean checkIfUserExist(String text) {
-    }*/
+    public Date getTimestamp(){
+        return date;
+    }
 
-    private void addMessage(String text, final String username){
+    private void addMessage(final String text, final String username){
        Thread addConvo = new Thread(new Runnable() {
            @Override
            public void run() {
@@ -52,23 +53,34 @@ public class CreateConvoActivity extends AppCompatActivity {
                    if (otherUser.isEmpty()) {
                        System.out.println("Here is the username");
                        System.out.println(username);
-                       addHandler.sendEmptyMessage(1);
+                       addHandler.sendEmptyMessage(2);
                        finish();
                        return;
                    }
                    DocumentSnapshot otherDocument = otherUser.getDocuments().get(0);
 
 
-                   Map<String, Object> data = new HashMap<>();
+                   Map<String, Object> convoData = new HashMap<>();
                    List<String> users = new ArrayList<>();
                    users.add(currentUserId);
                    users.add(otherDocument.getId());
 
-                   data.put("title", currentUserName + " & " + otherDocument.get("username"));
-                   data.put("users", users);
+                   convoData.put("title", currentUserName + " & " + otherDocument.get("username"));
+                   convoData.put("users", users);
 
-                   Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).add(data));
+                   DocumentReference doc = Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).add(convoData));
+                   String docID = doc.getId();
                    addHandler.sendEmptyMessage(0);
+
+                   Map<String, Object> messageData = new HashMap<>();
+
+                   messageData.put("body", text);
+                   messageData.put("convoID", docID);
+                   messageData.put("time_stamp", getTimestamp());
+                   messageData.put("userID", currentUserId);
+
+                   Tasks.await(db.collection(Constants.MESSAGES_PATH).add(messageData));
+                   addHandler.sendEmptyMessage(1);
                    finish();
 
                }catch (InterruptedException | ExecutionException e) {
@@ -86,7 +98,6 @@ public class CreateConvoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_convo);
 
         final Intent sendToConversation = new Intent(getBaseContext(), Conversations.class);
-        final Intent sendToMessage = new Intent(getBaseContext(), RegisterActivity.class);
 
         sendButton = findViewById(R.id.send_button);
         textField = findViewById(R.id.recipients_username);
@@ -120,9 +131,12 @@ public class CreateConvoActivity extends AppCompatActivity {
             super.handleMessage(m);
             switch (m.what) {
                 case 0:
-                    Toast.makeText(a.getApplicationContext(), "Added contact", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(a.getApplicationContext(), "Conversation created", Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
+                    Toast.makeText(a.getApplicationContext(), "Message Created", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
                     Toast.makeText(a.getApplicationContext(), "No such user", Toast.LENGTH_SHORT).show();
                     break;
             }
