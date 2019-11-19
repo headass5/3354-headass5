@@ -25,8 +25,8 @@ public class ChatsFragment extends Fragment {
         Button button = rootView.findViewById(R.id.create_convo);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View rootView) {
-                startActivity(new Intent(rootView.get
-                                         (), CreateConvoActivity.class));
+                startActivity(new Intent(rootView.getContext()
+                                         , CreateConvoActivity.class));
                 //startActivity(new Intent(rootView.getContext(), RegisterActivity.class));
             }
         });
