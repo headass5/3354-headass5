@@ -10,6 +10,10 @@
     <string name="title_activity_conversations">Conversations</string>
     <string name="action_settings">Settings</string>
     <string name="choose_profile">Choose Profile Picture</string>
-
-  <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create">create</string>
+    <string name="recipients_email">Recipients Email</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="send">Send</string>
+    <string name="enter_username">Enter Username</string>
 </resources>
