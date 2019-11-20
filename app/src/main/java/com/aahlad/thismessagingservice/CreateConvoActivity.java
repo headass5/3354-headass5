@@ -60,9 +60,17 @@ public class CreateConvoActivity extends AppCompatActivity {
                    }
                    DocumentSnapshot otherDocument = otherUser.getDocuments().get(0);
 
-                   String docID = currentUserName + "&" + otherDocument.get("username");
+                   List<String> usernames = new ArrayList<>();
+                   usernames.add(currentUserName);
+                   usernames.add(otherDocument.get("username").toString());
+                   Collections.sort(usernames);
 
-                   System.out.println(docID);
+                   StringBuilder docIDBuilder = new StringBuilder();
+                   for(int i = 0; i < usernames.size(); i++){
+                       docIDBuilder.append(usernames.get(i));
+                   }
+
+                   String docID = docIDBuilder.toString();
 
                    Map<String, Object> convoData = new HashMap<>();
                    List<String> users = new ArrayList<>();
@@ -73,13 +81,13 @@ public class CreateConvoActivity extends AppCompatActivity {
                    convoData.put("title", currentUserName + " & " + otherDocument.get("username"));
                    convoData.put("users", users);
 
-                   Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID).set(convoData));
+                   Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID.toString()).set(convoData));
                    addHandler.sendEmptyMessage(0);
 
                    Map<String, Object> messageData = new HashMap<>();
 
                    messageData.put("body", text);
-                   messageData.put("convoID", docID);
+                   messageData.put("convoID", docID.toString());
                    messageData.put("time_stamp", getTimestamp());
                    messageData.put("userID", currentUserId);
 
