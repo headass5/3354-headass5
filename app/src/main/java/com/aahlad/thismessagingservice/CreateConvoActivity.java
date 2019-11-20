@@ -124,7 +124,8 @@ public class CreateConvoActivity extends AppCompatActivity {
                     return;
                 }
                 else {
-                    createConversation(enteredText, enteredUser.trim());
+                    FirebaseQuery.createConversation(enteredText, enteredUser.trim(), addHandler);
+                    //createConversation(enteredText, enteredUser.trim());
                     startActivity(sendToConversation);
                     finish();
                 }
@@ -132,7 +133,7 @@ public class CreateConvoActivity extends AppCompatActivity {
         });
     }
 
-    private static class UserEmailHandler extends Handler{
+    static class UserEmailHandler extends Handler{
         private Activity a;
         UserEmailHandler(Activity a){
             this.a = a;
