@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,7 @@ public class CreateConvoActivity extends AppCompatActivity {
                    List<String> users = new ArrayList<>();
                    users.add(currentUserId);
                    users.add(otherDocument.getId());
+                   Collections.sort(users);
 
                    convoData.put("title", currentUserName + " & " + otherDocument.get("username"));
                    convoData.put("users", users);
