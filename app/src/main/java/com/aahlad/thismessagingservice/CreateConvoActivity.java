@@ -39,7 +39,7 @@ public class CreateConvoActivity extends AppCompatActivity {
         return date;
     }
 
-    private void addMessage(final String text, final String username){
+    private void createConversation(final String text, final String username){
        Thread addConvo = new Thread(new Runnable() {
            @Override
            public void run() {
@@ -116,7 +116,7 @@ public class CreateConvoActivity extends AppCompatActivity {
                     return;
                 }
                 else {
-                    addMessage(enteredText, enteredUser.trim());
+                    createConversation(enteredText, enteredUser.trim());
                     startActivity(sendToConversation);
                     finish();
                 }
