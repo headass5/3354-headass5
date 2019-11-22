@@ -63,7 +63,7 @@ public class FirebaseQuery {
                             .get());
 
                     if (otherUserName.isEmpty()) {
-                        addHandler.sendEmptyMessage(2);
+                        addHandler.sendEmptyMessage(Constants.USER_NOT_FOUND);
                         return;
                     }
 
@@ -82,10 +82,10 @@ public class FirebaseQuery {
                     String docID = docIDBuilder.toString();
 
                     addConversation(currentUserName, currentUserId, otherDocument, docID);
-                    addHandler.sendEmptyMessage(0);
+                    addHandler.sendEmptyMessage(Constants.CONVO_CREATED);
 
                     addMessages(docID, currentUserId, text);
-                    addHandler.sendEmptyMessage(1);
+                    addHandler.sendEmptyMessage(Constants.MESSAGE_CREATED);
 
                 }catch (InterruptedException | ExecutionException e) {
                     System.out.println("Create Contact exception");
