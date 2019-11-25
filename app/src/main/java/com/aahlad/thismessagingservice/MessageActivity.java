@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -108,6 +109,12 @@ public class MessageActivity extends AppCompatActivity {
                 User user = documentSnapshot.toObject(User.class);
                 assert user != null;
                 username.setText(user.getUsername());
+                if (user.getImageURL().equals("default")) {
+                    profile_image.setImageResource(R.mipmap.ic_launcher);
+                } else {
+                    Glide.with(MessageActivity.this).load(user.getImageURL()).into(profile_image);
+                }
+                readMessages(currentUser.getUid(), userid, user.getImageURL());
             }
         });
 
@@ -125,13 +132,14 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        /*
         db.collection(Constants.USER_META_PATH).document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
                 assert user != null;
 
-                //username.setText(user.getUsername());
+                username.setText(user.getUsername());
                 if (user.getImageURL().equals("default")) {
                     profile_image.setImageResource(R.mipmap.ic_launcher);
                 } else {
@@ -140,6 +148,9 @@ public class MessageActivity extends AppCompatActivity {
                 readMessages(currentUser.getUid(), userid, user.getImageURL());
             }
         });
+
+         */
+
     }
 
     private void sendMessage(String sender, final String receiver, final String message) {
@@ -191,6 +202,7 @@ public class MessageActivity extends AppCompatActivity {
                     messageData.put("convoID", docID.toString());
                     messageData.put("time_stamp", getTimestamp());
                     messageData.put("userID", currentUserId);
+                    messageData.put("receiver", receiver);
 
                     Tasks.await(db.collection(Constants.MESSAGES_PATH).add(messageData));
                     //finish();
