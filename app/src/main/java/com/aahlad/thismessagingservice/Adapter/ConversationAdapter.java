@@ -39,10 +39,11 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, MessageActivity.class);
-                System.out.println(conversation.getId());
-                intent.putExtra("conversationID", conversation.getId());
-                mContext.startActivity(intent);
+              System.out.println("On Click");
+              Intent intent = new Intent(mContext, MessageActivity.class);
+              System.out.println(conversation.getId());
+              intent.putExtra("conversationID", conversation.getId());
+              mContext.startActivity(intent);
             }
         });
     }
