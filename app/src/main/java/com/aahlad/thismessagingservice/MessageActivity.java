@@ -68,10 +68,18 @@ public class MessageActivity extends AppCompatActivity {
     
     final String currentUsername = currentUser.getDisplayName();
     final String otherUsername = intent.getStringExtra("otherUsername");
-    final String otherImageURL = intent.getStringExtra("otherImageURL");
+    String otherImageURL;
     
-    convoId = FirebaseQuery.generateConvoId(currentUsername, otherUsername);
     username.setText(otherUsername);
+    
+    if (intent.hasExtra("conversationID")) {
+      convoId = intent.getStringExtra("conversationID");
+      otherImageURL = "";
+    } else {
+      otherImageURL = intent.getStringExtra("otherImageURL");
+      Glide.with(MessageActivity.this).load(otherImageURL).into(profile_image);
+      convoId = FirebaseQuery.generateConvoId(currentUsername, otherUsername);
+    }
   
     recyclerView = findViewById(R.id.recycler_messages);
     recyclerView.setHasFixedSize(true);
@@ -80,8 +88,6 @@ public class MessageActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(linearLayoutManager);
     messageAdapter = new MessageAdapter(getApplicationContext(), mchat, otherImageURL);
     recyclerView.setAdapter(messageAdapter);
-    
-    Glide.with(MessageActivity.this).load(otherImageURL).into(profile_image);
     
     btn_send.setOnClickListener(new View.OnClickListener() {
       @Override

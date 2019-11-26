@@ -43,8 +43,6 @@ public class FirebaseQuery {
     convoData.put("users", users);
     
     Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID.toString()).set(convoData));
-    
-    //return docID;
   }
   
   static void addMessages(final String conversationId, final String currentUserId, final String text) {

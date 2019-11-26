@@ -5,15 +5,11 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.aahlad.thismessagingservice.MessageActivity;
 import com.aahlad.thismessagingservice.Model.Conversation;
-import com.aahlad.thismessagingservice.Model.User;
 import com.aahlad.thismessagingservice.R;
 
 import java.util.List;
@@ -44,6 +40,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
+                System.out.println(conversation.getId());
                 intent.putExtra("conversationID", conversation.getId());
                 mContext.startActivity(intent);
             }

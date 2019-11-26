@@ -1,9 +1,12 @@
 package com.aahlad.thismessagingservice.Model;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.util.List;
 
 public class Conversation {
     private String title;
+    @DocumentId
     private String id;
     private List<String> users;
 
