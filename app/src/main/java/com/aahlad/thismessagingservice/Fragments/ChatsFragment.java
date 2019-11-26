@@ -1,39 +1,62 @@
 package com.aahlad.thismessagingservice.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
-import com.aahlad.thismessagingservice.Adapter.UserAdapter;
+import com.aahlad.thismessagingservice.Adapter.ConversationAdapter;
+import com.aahlad.thismessagingservice.Constants;
 import com.aahlad.thismessagingservice.CreateConvoActivity;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.aahlad.thismessagingservice.Model.Chat;
-import com.aahlad.thismessagingservice.Model.User;
+import com.aahlad.thismessagingservice.Model.Conversation;
 import com.aahlad.thismessagingservice.R;
-import com.aahlad.thismessagingservice.RegisterActivity;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChatsFragment extends Fragment {
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ProgressBar spinner;
+    private RecyclerView contactRecycler;
+    private View view;
+    private ArrayList<Conversation> mChats;
+    private FloatingActionButton addContactButton;
+    private final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private LoadConversationHandler loadHandler;
+
+    private Runnable loadContactsRun = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                QuerySnapshot currentUserDoc = Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).whereArrayContains("users", currentUid).get());
+                mChats.clear();
+                for(DocumentSnapshot doc: currentUserDoc) {
+                    Conversation c = doc.toObject(Conversation.class);
+                    mChats.add(c);
+                    loadHandler.sendEmptyMessage(0);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,17 +64,37 @@ public class ChatsFragment extends Fragment {
         // Inflate the activity_create_convo for this fragment
         //return inflater.inflate(R.activity_create_convo.fragment_chats, container, false);
 
-        View rootView = inflater.inflate(R.layout.fragment_chats, container, false);
-        Button button = rootView.findViewById(R.id.create_convo);
+        view = inflater.inflate(R.layout.fragment_chats, container, false);
+        Button button = view.findViewById(R.id.create_convo);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View rootView) {
-                startActivity(new Intent(rootView.getContext()
-                        , CreateConvoActivity.class));
-                //startActivity(new Intent(rootView.getContext(), RegisterActivity.class));
+                startActivity(new Intent(rootView.getContext(), CreateConvoActivity.class));
             }
         });
 
-        return rootView;
+        mChats = new ArrayList<>();
+        loadHandler = new LoadConversationHandler(this);
+
+       return view;
+    }
+
+    private static class LoadConversationHandler extends Handler {
+        ChatsFragment fragment;
+
+        LoadConversationHandler(ChatsFragment f) {
+            fragment = f;
+        }
+
+        @Override
+        public void handleMessage(Message m) {
+            super.handleMessage(m);
+            // Once it gets a message populate recyclerView then remove the spinner
+            fragment.contactRecycler = fragment.view.findViewById(R.id.recycler_convo);
+            fragment.contactRecycler.setHasFixedSize(true);
+            fragment.contactRecycler.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+            ConversationAdapter conversationAdapter = new ConversationAdapter(fragment.getContext(), fragment.mChats);
+            fragment.contactRecycler.setAdapter(conversationAdapter);
+        }
     }
 
 }

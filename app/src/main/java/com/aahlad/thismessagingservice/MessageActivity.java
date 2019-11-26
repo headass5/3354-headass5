@@ -27,10 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -86,7 +84,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_convo);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
@@ -202,7 +200,6 @@ public class MessageActivity extends AppCompatActivity {
                     messageData.put("convoID", docID.toString());
                     messageData.put("time_stamp", getTimestamp());
                     messageData.put("userID", currentUserId);
-                    messageData.put("receiver", receiver);
 
                     Tasks.await(db.collection(Constants.MESSAGES_PATH).add(messageData));
                     //finish();

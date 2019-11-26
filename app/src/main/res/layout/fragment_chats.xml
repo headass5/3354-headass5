@@ -6,12 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.ChatsFragment">
 
-        <Button
-            android:id="@+id/create_convo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_convo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/create_convo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/create"
+                    app:layout_constraintBottom_toBottomOf="@+id/recycler_convo"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
