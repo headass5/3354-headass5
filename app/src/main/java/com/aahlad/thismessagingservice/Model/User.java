@@ -1,15 +1,19 @@
 package com.aahlad.thismessagingservice.Model;
 
+import java.util.List;
+
 public class User {
 
     private String id;
     private String username;
     private String imageURL;
+    private List<String> contacts;
 
-    public User(String id, String username, String imageURL) {
+    public User(String id, String username, String imageURL, List<String> contacts) {
         this.id = id;
         this.username = username;
         this.imageURL = imageURL;
+        this.contacts = contacts;
     }
 
     public User() {
@@ -39,7 +43,12 @@ public class User {
     public String getImageURL() {
       return imageURL;
     }
-
-
-
+  
+    public List<String> getContacts() {
+      return contacts;
+    }
+    
+    public void setContacts(List<String> contacts) {
+      this.contacts = contacts;
+    }
 }

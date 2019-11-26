@@ -1,10 +1,13 @@
 package com.aahlad.thismessagingservice.Model;
 
-public class Chat {
+import java.util.Date;
+
+public class Chat implements Comparable<Chat> {
 
     private String userID;
     private String body;
     private String convoID;
+    private Date time_stamp;
 
     public Chat(String userID, String receiver, String message, String convoID) {
         this.userID = userID;
@@ -38,5 +41,17 @@ public class Chat {
     public void setConvoID(String convoID) {
       this.convoID = convoID;
     }
+  
+    public Date getTime_stamp() {
+      return time_stamp;
+    }
     
+    public void setTime_stamp(Date time_stamp) {
+      this.time_stamp = time_stamp;
+    }
+  
+  @Override
+  public int compareTo(Chat chat) {
+    return chat.getTime_stamp().compareTo(this.time_stamp);
+  }
 }

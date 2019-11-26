@@ -1,6 +1,7 @@
 package com.aahlad.thismessagingservice;
 
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -15,14 +16,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class FirebaseQuery {
-  static Date date = new Date();
-  
   private static FirebaseFirestore db = FirebaseFirestore.getInstance();
   private static FirebaseAuth auth = FirebaseAuth.getInstance();
-  
-  public static Date getTimestamp() {
-    return date;
-  }
   
   static String generateConvoId(String... usernames) {
     ArrayList<String> allIds = new ArrayList<>();
@@ -59,8 +54,8 @@ public class FirebaseQuery {
         Map<String, Object> messageData = new HashMap<>();
       
         messageData.put("body", text);
-        messageData.put("convoID", conversationId.toString());
-        messageData.put("time_stamp", getTimestamp());
+        messageData.put("convoID", conversationId);
+        messageData.put("time_stamp", new Timestamp(new Date()));
         messageData.put("userID", currentUserId);
       
         try {
