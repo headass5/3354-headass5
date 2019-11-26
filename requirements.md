@@ -1,4 +1,4 @@
-# Software Requirements for PenPals
+# Software Requirements for This Messaging Service 
 
 ## Definitions, Acronyms, and Abbreviations
 SMS: Short Message Service \

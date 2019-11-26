@@ -7,7 +7,7 @@ The Singleton Pattern restricts the instantation of the class and the ensures th
 #Code location
 #insert here
 
-#Building the Software/ Implemented Functionalities 
+#Building the Software
 1. Open the application
 2. Click on button at the bottom of the screen to create an account
 3. Enter username and password that will be used as credentials for a specific user 
@@ -18,5 +18,18 @@ The Singleton Pattern restricts the instantation of the class and the ensures th
 7. User will be directed back to the chat page 
 
 #Working Software and The State of the UI 
- 
+
+#Implemented Function 
+The functionalties that we have incorporated in to The Messaging Service consists of, 
+-allowing the user to create an account
+-allowing the the login in to chat account
+-allowing the user to the set language for translation
+-allowing user to add a contact 
+-allowing the user to take and personalize the contact picture 
+-allowing the user to access specific message chat 
+
+In terms of the UI the functionality behind it is very user friendly, it is easy to follow and allows the user to navigate
+through the application. It is very personalized and customizable to the users preference. 
+
+
 
