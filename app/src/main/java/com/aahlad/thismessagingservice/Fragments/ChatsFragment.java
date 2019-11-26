@@ -7,17 +7,12 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-
-import com.aahlad.thismessagingservice.Adapter.ConversationAdapter;
-import com.aahlad.thismessagingservice.Constants;
-import com.aahlad.thismessagingservice.CreateConvoActivity;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.aahlad.thismessagingservice.Adapter.ConversationAdapter;
+import com.aahlad.thismessagingservice.Constants;
+import com.aahlad.thismessagingservice.CreateConvoActivity;
 import com.aahlad.thismessagingservice.Model.Conversation;
 import com.aahlad.thismessagingservice.R;
 import com.google.android.gms.tasks.Tasks;
@@ -32,7 +27,6 @@ import java.util.ArrayList;
 public class ChatsFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ProgressBar spinner;
     private RecyclerView contactRecycler;
     private View view;
     private ArrayList<Conversation> mChats;
@@ -40,7 +34,7 @@ public class ChatsFragment extends Fragment {
     private final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private LoadConversationHandler loadHandler;
 
-    private Runnable loadContactsRun = new Runnable() {
+    private Runnable loadConversationsRunnable = new Runnable() {
         @Override
         public void run() {
             try {
@@ -65,8 +59,8 @@ public class ChatsFragment extends Fragment {
         //return inflater.inflate(R.activity_create_convo.fragment_chats, container, false);
 
         view = inflater.inflate(R.layout.fragment_chats, container, false);
-        Button button = view.findViewById(R.id.create_convo);
-        button.setOnClickListener(new View.OnClickListener() {
+        addContactButton = view.findViewById(R.id.create_convo);
+        addContactButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View rootView) {
                 startActivity(new Intent(rootView.getContext(), CreateConvoActivity.class));
             }
@@ -75,10 +69,17 @@ public class ChatsFragment extends Fragment {
         mChats = new ArrayList<>();
         loadHandler = new LoadConversationHandler(this);
 
-       return view;
+        return view;
     }
-
-    private static class LoadConversationHandler extends Handler {
+    
+    @Override
+    public void onResume() {
+      super.onResume();
+      Thread loadContacts = new Thread(loadConversationsRunnable);
+      loadContacts.start();
+    }
+  
+  private static class LoadConversationHandler extends Handler {
         ChatsFragment fragment;
 
         LoadConversationHandler(ChatsFragment f) {

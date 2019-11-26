@@ -7,13 +7,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.aahlad.thismessagingservice.Adapter.MessageAdapter;
 import com.aahlad.thismessagingservice.Model.Chat;
 import com.aahlad.thismessagingservice.Model.User;
@@ -22,24 +20,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class MessageActivity extends AppCompatActivity {
     CircleImageView profile_image;
@@ -129,26 +117,6 @@ public class MessageActivity extends AppCompatActivity {
                 text_send.setText("");
             }
         });
-
-        /*
-        db.collection(Constants.USER_META_PATH).document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = documentSnapshot.toObject(User.class);
-                assert user != null;
-
-                username.setText(user.getUsername());
-                if (user.getImageURL().equals("default")) {
-                    profile_image.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    Glide.with(MessageActivity.this).load(user.getImageURL()).into(profile_image);
-                }
-                readMessages(currentUser.getUid(), userid, user.getImageURL());
-            }
-        });
-
-         */
-
     }
 
     private void sendMessage(String sender, final String receiver, final String message) {

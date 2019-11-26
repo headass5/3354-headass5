@@ -12,6 +12,8 @@ public class Conversation {
         this.id = id;
         this.users = users;
     }
+    
+    public Conversation() {}
 
     public String getTitle() {
         return title;
