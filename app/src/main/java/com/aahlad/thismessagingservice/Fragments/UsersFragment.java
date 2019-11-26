@@ -111,7 +111,7 @@ public class UsersFragment extends Fragment {
     public void handleMessage(Message m) {
       super.handleMessage(m);
       // Once it gets a message populate recyclerView then remove the spinner
-      fragment.contactRecycler = fragment.view.findViewById(R.id.recycler_view);
+      fragment.contactRecycler = fragment.view.findViewById(R.id.recycler_users);
       fragment.contactRecycler.setHasFixedSize(true);
       fragment.contactRecycler.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
       UserAdapter userAdapter = new UserAdapter(fragment.getContext(), fragment.mUsers);

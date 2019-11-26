@@ -73,7 +73,7 @@ public class MessageActivity extends AppCompatActivity {
     convoId = FirebaseQuery.generateConvoId(currentUsername, otherUsername);
     username.setText(otherUsername);
   
-    recyclerView = findViewById(R.id.recycler_view);
+    recyclerView = findViewById(R.id.recycler_messages);
     recyclerView.setHasFixedSize(true);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
     linearLayoutManager.setStackFromEnd(true);
@@ -83,7 +83,6 @@ public class MessageActivity extends AppCompatActivity {
     
     Glide.with(MessageActivity.this).load(otherImageURL).into(profile_image);
     
-    // Refactor
     btn_send.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
