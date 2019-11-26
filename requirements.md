@@ -8,9 +8,9 @@ MMS: Multimedia Messaging Service
 ## Functional Requirements
 1. The System will allow users to send messages in a 1:1 conversation
    * 1.1. The user will be able to translate received messages into their desired language.
-   * 1.2. The user sending the message will be able to see when the message is delivered.
-   * 1.3. The user sending the message will be able to see when the message is read.
-   * 1.4. The time stamps for each message will be shown in the conversation.
+   * 1.2. The user sending the body will be able to see when the body is delivered.
+   * 1.3. The user sending the body will be able to see when the body is read.
+   * 1.4. The time stamps for each body will be shown in the conversation.
    * 1.5. The users meesages will be stored in the database locally
    * 1.6. Messages will be stored in the database so they will be persisted when logged out
    

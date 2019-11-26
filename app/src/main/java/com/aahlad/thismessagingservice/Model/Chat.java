@@ -2,41 +2,41 @@ package com.aahlad.thismessagingservice.Model;
 
 public class Chat {
 
-    private String sender;
-    private String receiver;
-    private String message;
+    private String userID;
+    private String body;
+    private String convoID;
 
-    public Chat(String sender, String receiver, String message) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.message = message;
+    public Chat(String userID, String receiver, String message, String convoID) {
+        this.userID = userID;
+        this.body = message;
+        this.convoID = convoID;
     }
 
     public Chat() {
-
     }
 
-    public String getSender() {
-        return sender;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getBody() {
+        return body;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setBody(String body) {
+        this.body = body;
     }
-
-    public String getMessage() {
-        return message;
+  
+    public String getConvoID() {
+      return convoID;
     }
-
-    public void setMessage(String message) {
-        this.message = message;
+    
+    public void setConvoID(String convoID) {
+      this.convoID = convoID;
     }
+    
 }
