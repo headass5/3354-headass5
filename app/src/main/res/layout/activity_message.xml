@@ -41,7 +41,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_users"
+        android:id="@+id/recycler_messages"
         android:layout_below="@id/bar_layout"
         android:layout_above="@id/bottom" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_send"
             android:background="@android:color/transparent"
-            android:hint="Type a message..."
+            android:hint="Type a body..."
             android:layout_toLeftOf="@id/btn_send"
             android:layout_centerVertical="true"/>
 

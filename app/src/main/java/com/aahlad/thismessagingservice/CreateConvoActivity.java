@@ -12,17 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class CreateConvoActivity extends AppCompatActivity {
@@ -60,28 +54,17 @@ public class CreateConvoActivity extends AppCompatActivity {
                    }
                    DocumentSnapshot otherDocument = otherUser.getDocuments().get(0);
 
-                   List<String> usernames = new ArrayList<>();
-                   usernames.add(currentUserName);
-                   usernames.add(otherDocument.get("username").toString());
-                   Collections.sort(usernames);
-
-                   StringBuilder docIDBuilder = new StringBuilder();
-                   for(int i = 0; i < usernames.size(); i++){
-                       docIDBuilder.append(usernames.get(i));
-                   }
-
-                   String docID = docIDBuilder.toString();
-
+                   String docID = FirebaseQuery.generateConvoId(currentUserName, otherDocument.get("username").toString());
+                   
                    Map<String, Object> convoData = new HashMap<>();
                    List<String> users = new ArrayList<>();
                    users.add(currentUserId);
                    users.add(otherDocument.getId());
-                   Collections.sort(users);
-
+                   
                    convoData.put("title", currentUserName + " & " + otherDocument.get("username"));
                    convoData.put("users", users);
 
-                   Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID.toString()).set(convoData));
+                   Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID).set(convoData));
                    addHandler.sendEmptyMessage(0);
 
                    Map<String, Object> messageData = new HashMap<>();

@@ -1,42 +1,57 @@
 package com.aahlad.thismessagingservice.Model;
 
-public class Chat {
+import java.util.Date;
 
-    private String sender;
-    private String receiver;
-    private String message;
+public class Chat implements Comparable<Chat> {
 
-    public Chat(String sender, String receiver, String message) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.message = message;
+    private String userID;
+    private String body;
+    private String convoID;
+    private Date time_stamp;
+
+    public Chat(String userID, String receiver, String message, String convoID) {
+        this.userID = userID;
+        this.body = message;
+        this.convoID = convoID;
     }
 
     public Chat() {
-
     }
 
-    public String getSender() {
-        return sender;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getBody() {
+        return body;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setBody(String body) {
+        this.body = body;
     }
-
-    public String getMessage() {
-        return message;
+  
+    public String getConvoID() {
+      return convoID;
     }
-
-    public void setMessage(String message) {
-        this.message = message;
+    
+    public void setConvoID(String convoID) {
+      this.convoID = convoID;
     }
+  
+    public Date getTime_stamp() {
+      return time_stamp;
+    }
+    
+    public void setTime_stamp(Date time_stamp) {
+      this.time_stamp = time_stamp;
+    }
+  
+  @Override
+  public int compareTo(Chat chat) {
+    return chat.getTime_stamp().compareTo(this.time_stamp);
+  }
 }

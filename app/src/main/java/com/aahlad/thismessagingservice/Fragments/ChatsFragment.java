@@ -55,9 +55,6 @@ public class ChatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the activity_create_convo for this fragment
-        //return inflater.inflate(R.activity_create_convo.fragment_chats, container, false);
-
         view = inflater.inflate(R.layout.fragment_chats, container, false);
         addContactButton = view.findViewById(R.id.create_convo);
         addContactButton.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +76,7 @@ public class ChatsFragment extends Fragment {
       loadContacts.start();
     }
   
-  private static class LoadConversationHandler extends Handler {
+    private static class LoadConversationHandler extends Handler {
         ChatsFragment fragment;
 
         LoadConversationHandler(ChatsFragment f) {
@@ -97,5 +94,4 @@ public class ChatsFragment extends Fragment {
             fragment.contactRecycler.setAdapter(conversationAdapter);
         }
     }
-
 }
