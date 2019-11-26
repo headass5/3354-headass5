@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -66,18 +66,10 @@ public class AddContact extends AppCompatActivity {
               }
               String otherUserId = otherUser.getDocuments().get(0).getId();
   
-              ArrayList<String> newContacts;
+              Tasks.await(db.collection(Constants.USER_META_PATH)
+                  .document(currentUid)
+                  .update("contacts", FieldValue.arrayUnion(otherUserId)));
               
-              if (!data.containsKey("contacts") || data.get("contacts") == null) {
-                newContacts = new ArrayList<>();
-              }
-              else {
-                newContacts = (ArrayList<String>) data.get("contacts");
-              }
-              newContacts.add(otherUserId);
-              
-              data.put("contacts", newContacts);
-              Tasks.await(db.collection(Constants.USER_META_PATH).document(currentUid).update(data));
               addHandler.sendEmptyMessage(0);
               finish();
             } catch (InterruptedException | ExecutionException e) {

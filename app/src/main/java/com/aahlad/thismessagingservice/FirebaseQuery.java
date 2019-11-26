@@ -32,17 +32,16 @@ public class FirebaseQuery {
     return docIDBuilder.toString();
   }
   
-  static void addConversation(String currentUserName, String currentUserId, DocumentSnapshot otherDocument, String docID) throws ExecutionException, InterruptedException {
+  static void addConversation(String currentUserName, String currentUserId, String otherUserName, String otherUserId, String docID) throws ExecutionException, InterruptedException {
     Map<String, Object> convoData = new HashMap<>();
     List<String> users = new ArrayList<>();
     users.add(currentUserId);
-    users.add(otherDocument.getId());
-    Collections.sort(users);
+    users.add(otherUserId);
     
-    convoData.put("title", currentUserName + " & " + otherDocument.get("username"));
+    convoData.put("title", currentUserName + " & " + otherUserName);
     convoData.put("users", users);
     
-    Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID.toString()).set(convoData));
+    Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID).set(convoData));
   }
   
   static void addMessages(final String conversationId, final String currentUserId, final String text) {
@@ -83,20 +82,13 @@ public class FirebaseQuery {
           }
           
           DocumentSnapshot otherDocument = otherUserName.getDocuments().get(0);
+          String docID = generateConvoId(currentUserName, otherDocument.get("username").toString());
           
-          List<String> usernames = new ArrayList<>();
-          usernames.add(currentUserName);
-          usernames.add(otherDocument.get("username").toString());
-          Collections.sort(usernames);
-          
-          StringBuilder docIDBuilder = new StringBuilder();
-          for (int i = 0; i < usernames.size(); i++) {
-            docIDBuilder.append(usernames.get(i));
-          }
-          
-          String docID = docIDBuilder.toString();
-          
-          addConversation(currentUserName, currentUserId, otherDocument, docID);
+          addConversation(currentUserName,
+              currentUserId,
+              otherDocument.get("username").toString(),
+              otherDocument.getId(),
+              docID);
           addHandler.sendEmptyMessage(Constants.CONVO_CREATED);
           
           addMessages(docID, currentUserId, text);
