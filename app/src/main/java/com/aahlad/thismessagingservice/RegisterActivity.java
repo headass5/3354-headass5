@@ -40,12 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
   FirebaseFirestore db = FirebaseFirestore.getInstance();
   private boolean pictureSelected = false;
   
-  private final int PROFILE_IMAGE_REQ_CODE = 101;
-  private final int GALLERY_IMAGE_REQ_CODE = 102;
-  private final int CAMERA_IMAGE_REQ_CODE = 103;
-  private final String DEFAULT_IMAGE_URL =
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE2nnhjrSnA-nOn-pmBR1w1yIO5VytHaju-l-rUjNixn-w8oE4";
-      
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

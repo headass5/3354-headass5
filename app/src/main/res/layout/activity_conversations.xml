@@ -15,16 +15,18 @@
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@color/colorPrimary"
+      android:background="@drawable/gradient_bg_no_radius"
       app:popupTheme="@style/MenuStyle"
-      app:titleTextColor="@android:color/primary_text_dark"/>
+      app:titleTextColor="@android:color/primary_text_dark" />
 
     <com.google.android.material.tabs.TabLayout
       android:id="@+id/tab_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@color/colorPrimary"
+      android:background="@drawable/gradient_bg_no_radius"
+      app:tabGravity="center"
       app:tabIndicatorColor="#fff"
+      app:tabRippleColor="#81C784"
       app:tabSelectedTextColor="#fff"
       app:tabTextColor="#fff" />
 

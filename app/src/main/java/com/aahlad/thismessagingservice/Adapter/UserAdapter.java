@@ -36,7 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final User user = mUsers.get(position);
         holder.username.setText(user.getUsername());
         if(user.getImageURL().equals("default")) {
@@ -49,7 +49,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
-                intent.putExtra("userid", user.getId());
+                intent.putExtra("otherUserID", user.getId());
+                intent.putExtra("otherUsername", user.getUsername());
+                intent.putExtra("otherImageURL", user.getImageURL());
                 mContext.startActivity(intent);
             }
         });
