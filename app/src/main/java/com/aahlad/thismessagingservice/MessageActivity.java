@@ -40,7 +40,7 @@ public class MessageActivity extends AppCompatActivity {
   Intent intent;
   User currentUserMeta;
   String otherImageURL;
-  
+  LinearLayoutManager linearLayoutManager;
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
   private FirebaseAuth auth = FirebaseAuth.getInstance();
   
@@ -101,7 +101,7 @@ public class MessageActivity extends AppCompatActivity {
         @Override
         public void run() {
           recyclerView.setHasFixedSize(true);
-          LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+          linearLayoutManager = new LinearLayoutManager(getApplicationContext());
           linearLayoutManager.setStackFromEnd(true);
           recyclerView.setLayoutManager(linearLayoutManager);
           messageAdapter = new MessageAdapter(getApplicationContext(), mchat, otherImageURL, currentUserMeta.getLanguage());
@@ -133,6 +133,7 @@ public class MessageActivity extends AppCompatActivity {
                     Chat c = dc.getDocument().toObject(Chat.class);
                     mchat.add(c);
                     messageAdapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(mchat.size() - 1);
                   }
                 }
               }
