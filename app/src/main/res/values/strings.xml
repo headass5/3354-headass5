@@ -16,4 +16,11 @@
     <string name="edit_message">Enter a body</string>
     <string name="send">Send</string>
     <string name="enter_username">Enter Username</string>
+
+    <string-array name="language_choices_array">
+      <item>English</item>
+      <item>español</item>
+      <item>Deutsche</item>
+      <item>Français</item>
+    </string-array>
 </resources>
