@@ -8,12 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -36,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
   Button btn_register;
   Button btn_choose_profile;
   ImageView profile_img_view;
+  Spinner languageDropdown;
   FirebaseAuth auth;
   FirebaseFirestore db = FirebaseFirestore.getInstance();
   private boolean pictureSelected = false;
@@ -51,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
     confirmPassword = findViewById(R.id.register_confirm_password_field);
     btn_register = findViewById(R.id.create_account_button);
     btn_choose_profile = findViewById(R.id.choose_profile_picture_button);
+    languageDropdown = findViewById(R.id.language_dropdown);
     profile_img_view = findViewById(R.id.profile_img_view);
     profile_img_view.setDrawingCacheEnabled(true);
     
@@ -76,13 +74,30 @@ public class RegisterActivity extends AppCompatActivity {
       String txt_email = email.getText().toString();
       String txt_password = password.getText().toString();
       String confirmTxtPassword = confirmPassword.getText().toString();
+      String selectedLanguage = languageDropdown.getSelectedItem().toString();
+      String selectedLanguageCode;
+      
+      switch (selectedLanguage) {
+        case "español":
+          selectedLanguageCode = "es";
+          break;
+        case "Deutsche":
+          selectedLanguageCode = "de";
+          break;
+        case "Français":
+          selectedLanguageCode = "fr";
+          break;
+        default:
+          selectedLanguageCode = "en";
+          break;
+      }
       
       if (!pictureSelected || TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(confirmTxtPassword)) {
         Toast.makeText(RegisterActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
       } else if (!txt_password.equals(confirmTxtPassword)) {
         Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
       } else {
-        register(txt_username, txt_email, txt_password);
+        register(txt_username, txt_email, txt_password, selectedLanguageCode);
       }
       }
     });
@@ -105,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
   }
   
-  private void register(final String username, final String email, final String password) {
+  private void register(final String username, final String email, final String password, final String languageCode) {
     Thread addUserThread = new Thread(new Runnable() {
       @Override
       public void run() {
@@ -122,25 +137,23 @@ public class RegisterActivity extends AppCompatActivity {
           byte[] data = baos.toByteArray();
   
           FirebaseStorage storage = FirebaseStorage.getInstance();
-          System.out.println("Here1");
+          
           StorageReference ref = storage.getReference(userid + "/profile.jpg");
           Tasks.await(ref.putBytes(data));
           
-          System.out.println("Here2");
           Uri uri = Tasks.await(ref.getDownloadUrl());
           
-          System.out.println("Here3");
           HashMap<String, Object> newUserMeta = new HashMap<>();
           newUserMeta.put("id", userid);
           newUserMeta.put("username", username);
           newUserMeta.put("imageURL", "default");
+          newUserMeta.put("language", languageCode);
           
           if (uri != null) {
             newUserMeta.put("imageURL", uri.toString());
           }
           
           Tasks.await(db.collection(Constants.USER_META_PATH).document(userid).set(newUserMeta));
-          Log.println(1, "Firestore", "User meta added");
           
           UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
               .setDisplayName(username).setPhotoUri(uri).build();

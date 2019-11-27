@@ -3,24 +3,33 @@ package com.aahlad.thismessagingservice.Model;
 import java.util.List;
 
 public class User {
-
     private String id;
     private String username;
     private String imageURL;
     private List<String> contacts;
-
-    public User(String id, String username, String imageURL, List<String> contacts) {
+    private String language;
+    
+    public User(String id, String username, String imageURL, List<String> contacts, String language) {
         this.id = id;
         this.username = username;
         this.imageURL = imageURL;
         this.contacts = contacts;
+        this.language = language;
     }
 
     public User() {
 
     }
-
-    public void setId(String id) {
+  
+  public String getLanguage() {
+    return language;
+  }
+  
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+  
+  public void setId(String id) {
         this.id = id;
     }
 
