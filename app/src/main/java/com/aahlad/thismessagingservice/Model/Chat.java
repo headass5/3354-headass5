@@ -10,7 +10,7 @@ public class Chat implements Comparable<Chat> {
   private Date time_stamp;
   private Map<String, String> translations;
 
-  public Chat(String userID, String receiver, String message, String convoID, Map<String, String> translations) {
+  public Chat(String userID, String message, String convoID, Map<String, String> translations) {
       this.userID = userID;
       this.body = message;
       this.convoID = convoID;
