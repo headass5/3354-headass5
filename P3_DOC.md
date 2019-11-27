@@ -1,8 +1,10 @@
 # Implementation and Documentation
 
 # Design Pattern 
-The design pattern that headass followed for This Messaging Service was the Singleton Pattern.
-The Singleton Pattern restricts the instantation of the class and the ensures that only one instance of the class exists. It falls under the Factory Method class and is an object of that class. 
+The design pattern that headass followed for This Messaging Service was the Composite Design Pattern.
+The Composite Design Pattern allows for less duplication and clean interface.
+It is easy to add, remove, new types. Additionally, the traverse and display operations is uniform for internal nodes and leaves. 
+The Composite Design Pattern that is used in the code extends to the viewholder class, it is responsible for finding images and titles and setting its own variables (this can be seen in the both the conversation and contact). It gets passed to the same adapter class.  
 
 #Code location
 #insert here
