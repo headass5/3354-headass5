@@ -24,13 +24,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Context mContext;
     private List<Chat> mChat;
     private String imageurl;
-
+    private String language;
+    
     FirebaseUser fuser;
 
-    public MessageAdapter(Context mContext, List<Chat> mChat, String imageurl) {
+    public MessageAdapter(Context mContext, List<Chat> mChat, String imageurl, String language) {
         this.mChat = mChat;
         this.mContext = mContext;
         this.imageurl = imageurl;
+        this.language = language;
     }
 
     @NonNull
@@ -50,7 +52,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         Chat chat = mChat.get(position);
 
-        holder.show_message.setText(chat.getBody());
+        holder.show_message.setText(chat.getTranslations().get(language));
 
         if(imageurl.equals("default")) {
             holder.profile_image.setImageResource(R.mipmap.ic_launcher);

@@ -1,7 +1,6 @@
 package com.aahlad.thismessagingservice;
 
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -13,12 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class FirebaseQuery {
@@ -70,7 +64,7 @@ public class FirebaseQuery {
   }
 
   
-  static void addMessages(final String conversationId, final String currentUserId, final String text) {
+  static void addMessages(final String conversationId, final String currentUserId, final String text, final String originalLanguage) {
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -81,8 +75,6 @@ public class FirebaseQuery {
         messageData.put("userID", currentUserId);
 
         try {
-          DocumentSnapshot d = Tasks.await(db.collection(Constants.USER_META_PATH).document(currentUserId).get());
-          String originalLanguage = (String) d.get("language");
           Object translation = Tasks.await(translateMessage(text, originalLanguage));
           messageData.put("translations", translation);
           messageData.put("time_stamp", new Timestamp(new Date()));
@@ -121,8 +113,8 @@ public class FirebaseQuery {
               docID);
           addHandler.sendEmptyMessage(Constants.CONVO_CREATED);
           
-          addMessages(docID, currentUserId, text);
-          addHandler.sendEmptyMessage(Constants.MESSAGE_CREATED);
+//          addMessages(docID, currentUserId, text);
+//          addHandler.sendEmptyMessage(Constants.MESSAGE_CREATED);
           
         } catch (InterruptedException | ExecutionException e) {
           System.out.println("Create Contact exception");

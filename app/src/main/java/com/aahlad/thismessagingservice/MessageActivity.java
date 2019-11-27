@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,13 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aahlad.thismessagingservice.Adapter.MessageAdapter;
 import com.aahlad.thismessagingservice.Model.Chat;
+import com.aahlad.thismessagingservice.Model.User;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class MessageActivity extends AppCompatActivity {
   CircleImageView profile_image;
@@ -36,7 +38,9 @@ public class MessageActivity extends AppCompatActivity {
   
   RecyclerView recyclerView;
   Intent intent;
-  
+  User currentUserMeta;
+  String otherImageURL;
+  LinearLayoutManager linearLayoutManager;
   private FirebaseFirestore db = FirebaseFirestore.getInstance();
   private FirebaseAuth auth = FirebaseAuth.getInstance();
   
@@ -68,7 +72,6 @@ public class MessageActivity extends AppCompatActivity {
     
     final String currentUsername = currentUser.getDisplayName();
     final String otherUsername = intent.getStringExtra("otherUsername");
-    String otherImageURL;
     
     username.setText(otherUsername);
     
@@ -82,48 +85,67 @@ public class MessageActivity extends AppCompatActivity {
     }
   
     recyclerView = findViewById(R.id.recycler_messages);
-    recyclerView.setHasFixedSize(true);
-    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-    linearLayoutManager.setStackFromEnd(true);
-    recyclerView.setLayoutManager(linearLayoutManager);
-    messageAdapter = new MessageAdapter(getApplicationContext(), mchat, otherImageURL);
-    recyclerView.setAdapter(messageAdapter);
-    
-    btn_send.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        String msg = text_send.getText().toString();
-        if(!msg.equals("")) {
-          FirebaseQuery.addMessages(convoId, currentUser.getUid(), msg);
-        } else {
-          Toast.makeText(MessageActivity.this, "You can't send an empty message", Toast.LENGTH_SHORT).show();
-        }
-        text_send.setText("");
-      }
-    });
   }
+  
+  private Runnable loadup = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        DocumentSnapshot d = Tasks.await(db.collection(Constants.USER_META_PATH).document(currentUser.getUid()).get());
+        currentUserMeta = d.toObject(User.class);
+      } catch (ExecutionException | InterruptedException e) {
+        e.printStackTrace();
+      }
+  
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          recyclerView.setHasFixedSize(true);
+          linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+          linearLayoutManager.setStackFromEnd(true);
+          recyclerView.setLayoutManager(linearLayoutManager);
+          messageAdapter = new MessageAdapter(getApplicationContext(), mchat, otherImageURL, currentUserMeta.getLanguage());
+          recyclerView.setAdapter(messageAdapter);
+        }
+      });
+      
+      btn_send.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          String msg = text_send.getText().toString();
+          if(!msg.equals("")) {
+            FirebaseQuery.addMessages(convoId, currentUser.getUid(), msg, currentUserMeta.getLanguage());
+          }
+          text_send.setText("");
+        }
+      });
+  
+      db.collection(Constants.MESSAGES_PATH)
+          .whereEqualTo("convoID", convoId)
+          .orderBy("time_stamp", Query.Direction.ASCENDING)
+          .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException e) {
+              if (queryDocumentSnapshots != null) {
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                  if (dc.getType() == DocumentChange.Type.ADDED) {
+                    Chat c = dc.getDocument().toObject(Chat.class);
+                    mchat.add(c);
+                    messageAdapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(mchat.size() - 1);
+                  }
+                }
+              }
+            }
+          });
+    }
+  };
   
   @Override
   public void onResume() {
     super.onResume();
 
-    db.collection(Constants.MESSAGES_PATH)
-      .whereEqualTo("convoID", convoId)
-      .orderBy("time_stamp", Query.Direction.ASCENDING)
-      .addSnapshotListener(new EventListener<QuerySnapshot>() {
-        @Override
-        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                            @Nullable FirebaseFirestoreException e) {
-          if (queryDocumentSnapshots != null) {
-            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-              if (dc.getType() == DocumentChange.Type.ADDED) {
-                Chat c = dc.getDocument().toObject(Chat.class);
-                mchat.add(c);
-                messageAdapter.notifyDataSetChanged();
-              }
-            }
-          }
-        }
-      });
+    new Thread(loadup).start();
   }
 }

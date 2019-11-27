@@ -1,24 +1,34 @@
 package com.aahlad.thismessagingservice.Model;
 
 import java.util.Date;
+import java.util.Map;
 
 public class Chat implements Comparable<Chat> {
+  private String userID;
+  private String body;
+  private String convoID;
+  private Date time_stamp;
+  private Map<String, String> translations;
 
-    private String userID;
-    private String body;
-    private String convoID;
-    private Date time_stamp;
+  public Chat(String userID, String message, String convoID, Map<String, String> translations) {
+      this.userID = userID;
+      this.body = message;
+      this.convoID = convoID;
+      this.translations = translations;
+  }
 
-    public Chat(String userID, String receiver, String message, String convoID) {
-        this.userID = userID;
-        this.body = message;
-        this.convoID = convoID;
-    }
-
-    public Chat() {
-    }
-
-    public String getUserID() {
+  public Chat() {
+  }
+  
+  public Map<String, String> getTranslations() {
+    return translations;
+  }
+  
+  public void setTranslations(Map<String, String> translations) {
+    this.translations = translations;
+  }
+  
+  public String getUserID() {
         return userID;
     }
 
