@@ -1,11 +1,17 @@
 package com.aahlad.thismessagingservice;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +24,8 @@ import java.util.concurrent.ExecutionException;
 public class FirebaseQuery {
   private static FirebaseFirestore db = FirebaseFirestore.getInstance();
   private static FirebaseAuth auth = FirebaseAuth.getInstance();
+  private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+
   
   static String generateConvoId(String... usernames) {
     ArrayList<String> allIds = new ArrayList<>();
@@ -43,6 +51,24 @@ public class FirebaseQuery {
     
     Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID).set(convoData));
   }
+
+  private static Task<Object> translateMessage(final String text, final String originalLanguage){
+    Map<String, String> data = new HashMap<>();
+    data.put("originalText", text);
+    data.put("fromLanguage", originalLanguage);
+
+    return mFunctions
+            .getHttpsCallable("translate")
+            .call(data)
+            .continueWith(new Continuation<HttpsCallableResult, Object>() {
+              @Override
+              public Object then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                return task.getResult().getData();
+              }
+            });
+
+  }
+
   
   static void addMessages(final String conversationId, final String currentUserId, final String text) {
     new Thread(new Runnable() {
@@ -52,10 +78,14 @@ public class FirebaseQuery {
       
         messageData.put("body", text);
         messageData.put("convoID", conversationId);
-        messageData.put("time_stamp", new Timestamp(new Date()));
         messageData.put("userID", currentUserId);
-      
+
         try {
+          DocumentSnapshot d = Tasks.await(db.collection(Constants.USER_META_PATH).document(currentUserId).get());
+          String originalLanguage = (String) d.get("language");
+          Object translation = Tasks.await(translateMessage(text, originalLanguage));
+          messageData.put("translations", translation);
+          messageData.put("time_stamp", new Timestamp(new Date()));
           Tasks.await(db.collection(Constants.MESSAGES_PATH).add(messageData));
         } catch (ExecutionException | InterruptedException e) {
           e.printStackTrace();
