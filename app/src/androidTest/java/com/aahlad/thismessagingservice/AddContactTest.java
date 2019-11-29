@@ -9,7 +9,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -23,28 +22,39 @@ import static org.junit.Assert.*;
 
 public class AddContactTest {
 
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Rule
-    public ActivityTestRule<AddContact> addContactActivityTestRule = new ActivityTestRule<AddContact>(AddContact.class);
+    public ActivityTestRule<AddContact> addContactActivityTestRule =
+            new ActivityTestRule<AddContact>(AddContact.class);
 
     @Rule
-    public ExpectedException thrown= ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none();
 
     private AddContact addContact = null;
 
+    // Before test cases, get the AddContact activity
     @Before
     public void setUp() {
         addContact = addContactActivityTestRule.getActivity();
     }
 
+    /*
+    Test to see if the activity launched successfully. Expected result: the activity will launch
+    and the test case will pass when the create contact element is found
+     */
     @Test
     public void testLaunch() {
         View view = addContact.findViewById(R.id.create_contact);
         assertNotNull(view);
     }
 
+    /*
+    Test to see if once the user adds a contact, then that is updated in the Firestore database.
+    Test will add the 'englishUser', and once added, then will check user's list of contacts in the
+    database to make sure that the englishUser ID will be under the user's list of contacts.
+    Expected value: englishUser will be added to user's contacts in the database and return true.
+     */
     @Test
     public void testIfContactAdded() throws Exception {
         final EditText contactUsername = (EditText) addContact.findViewById(R.id.new_contact_username);
@@ -54,7 +64,8 @@ public class AddContactTest {
         button.performClick();
         Thread.sleep(1000);
 
-        db.collection("userMeta").whereArrayContains("contacts", englishUserID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("userMeta").whereArrayContains("contacts", englishUserID).
+                get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -64,6 +75,7 @@ public class AddContactTest {
         });
     }
 
+    // After test, set addContact instance to null
     @After
     public void tearDown() throws Exception {
         addContact = null;

@@ -22,30 +22,40 @@ public class RegisterActivityTest {
     public ActivityTestRule<RegisterActivity> registerActivityTestRule = new ActivityTestRule<RegisterActivity>(RegisterActivity.class);
 
     @Rule
-    public ExpectedException thrown= ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none();
 
     private RegisterActivity registerActivity = null;
 
+    // Before test, set up RegisterActivity activity
     @Before
     public void setUp() {
         registerActivity = registerActivityTestRule.getActivity();
     }
 
+    // Test launch to make sure that the register activity loaded successfully
     @Test
     public void testLaunch() {
         View view = registerActivity.findViewById(R.id.appTitle2);
         assertNotNull(view);
     }
 
-    // If user enters correct credentials, then assert that a user is created
+    /*
+    Test to see if the user successfully registered. This test method calls the register function.
+    Once the register function is called, then the current user should be created, so the expected
+    result is to return true after the method asserts that the user was created after registration.
+     */
     @Test
     public void testIfUserCreated() {
         registerActivity.register("username", "email@gmail.com", "password", "en");
         assertNotNull(auth.getCurrentUser());
     }
 
-    // If user enters incorrect credentials, then expect an IllegalArgumentException and
-    // for there to be a null user
+    /*
+    Test to see if the user is not created. This test method calls the register function, but does not
+    include an argument for the email. You need all four parameters to register, so if a parameter
+    is missing, then the method should throw an exception and not create a user. Therefore, the
+    expected value is that an exception should be thrown and the current user should be null.
+     */
     @Test
     public void testIfUserNotCreated() {
         registerActivity.register("username", "", "password", "en");
@@ -53,6 +63,7 @@ public class RegisterActivityTest {
         assertNull(auth.getCurrentUser());
     }
 
+    // After test, set registerActivity to null
     @After
     public void tearDown() {
         registerActivity = null;
