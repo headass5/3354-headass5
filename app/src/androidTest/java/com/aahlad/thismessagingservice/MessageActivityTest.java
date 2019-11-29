@@ -1,6 +1,9 @@
 package com.aahlad.thismessagingservice;
 
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.test.rule.ActivityTestRule;
@@ -44,12 +47,31 @@ public class MessageActivityTest {
     }
 
     @Test
-    public void testIfUserSentMessages() {
+    public void testIfUserHasSentMessages() {
         db.collection("messages").whereEqualTo("userID", auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
-                    assertTrue(true);
+                    assert true;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void testIfUserCanSendMessages() throws Exception {
+        final EditText textToSend = (EditText) messageActivity.findViewById(R.id.text_send);
+        String message = "Sending a unique test message";
+        textToSend.setText(message);
+        Button button = (Button) messageActivity.findViewById(R.id.btn_send);
+        button.performClick();
+        Thread.sleep(1000);
+
+        db.collection("messages").whereEqualTo("body", message).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    assert true;
                 }
             }
         });
