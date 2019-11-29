@@ -33,6 +33,7 @@ public class FirebaseQueryTest {
 
     @Test
     public void testIfMessageTranslated() {
-        
+        String result = firebaseQuery.translateMessage("hello", "fr").toString();
+        assertEquals("Bonjour", result);
     }
 }

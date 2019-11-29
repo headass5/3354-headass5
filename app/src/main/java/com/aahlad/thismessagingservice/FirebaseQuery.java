@@ -48,7 +48,7 @@ public class FirebaseQuery extends AppCompatActivity {
     Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID).set(convoData));
   }
 
-  private static Task<Object> translateMessage(final String text, final String originalLanguage){
+  public static Task<Object> translateMessage(final String text, final String originalLanguage){
     Map<String, String> data = new HashMap<>();
     data.put("originalText", text);
     data.put("fromLanguage", originalLanguage);
