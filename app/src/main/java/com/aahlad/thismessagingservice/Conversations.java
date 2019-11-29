@@ -1,6 +1,7 @@
 package com.aahlad.thismessagingservice;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 public class Conversations extends AppCompatActivity {
   CircleImageView profile_image;
+  Toolbar toolbar;
   FirebaseUser firebaseUser;
 
   @Override
@@ -29,10 +31,13 @@ public class Conversations extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_conversations);
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.toolbar);
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    
     String userName = firebaseUser.getDisplayName();
-    if (userName.isEmpty()) {
+    Uri uri = firebaseUser.getPhotoUrl();
+    
+    if (userName == null || userName.isEmpty()) {
       toolbar.setTitle("Hello!");
     } else {
       toolbar.setTitle("Hello " + userName + "!");
