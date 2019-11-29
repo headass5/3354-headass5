@@ -1,6 +1,8 @@
 package com.aahlad.thismessagingservice;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -15,7 +17,7 @@ import com.google.firebase.functions.HttpsCallableResult;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-public class FirebaseQuery {
+public class FirebaseQuery extends AppCompatActivity {
   private static FirebaseFirestore db = FirebaseFirestore.getInstance();
   private static FirebaseAuth auth = FirebaseAuth.getInstance();
   private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
