@@ -1,4 +1,7 @@
 # Implementation and Documentation
+Enter text here
+
+&nbsp;
 
 # Design Pattern 
 The design pattern that headass followed for This Messaging Service was the Composite Design Pattern.
@@ -9,6 +12,7 @@ The Composite Design Pattern that is used in the code extends to the viewholder 
 #Code location
 #insert here
 
+&nbsp;
 
 # Test Classes
 ### 1. Test Class: RegisterActivityTest.java -> Located [here](./app/src/androidTest/java/com/aahlad/thismessagingservice/RegisterActivityTest.java)
@@ -249,8 +253,85 @@ public class FirebaseQueryTest {
         assertEquals("Bonjour", result);
     }
 }
-``` 
+```
 
+### 5. Test Class: CreateContactActivityTest.java -> Located [here](./app/src/androidTest/java/com/aahlad/thismessagingservice/CreateConvoActivityTest.java)
+- Test Class completed by Patrick. This class tests if the create conversation functionality is working correctly by checking if the conversation is saved correctly on the database.
+```java
+public class CreateConvoActivityTest {
+
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    @Rule
+    public ActivityTestRule<CreateConvoActivity> createConvoActivityActivityTestRule =
+            new ActivityTestRule<CreateConvoActivity>(CreateConvoActivity.class);
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    private CreateConvoActivity createConvoActivity = null;
+
+    // Before test, get the CreateConvoActivity
+    @Before
+    public void setUp() {
+        createConvoActivity = createConvoActivityActivityTestRule.getActivity();
+    }
+
+    // Test to see if the CreateConvoActvitiy launched successfully
+    @Test
+    public void testLaunch() {
+        View view = createConvoActivity.findViewById(R.id.recipients_username);
+        assertNotNull(view);
+    }
+
+    /*
+    This test is to see if the user can create a conversation with a new user. This method simulates
+    a conversation between the current user and the 'englishUser'. Once the current user sends a
+    message to the englishUser, the method gets the names of the two users, and checks if the title
+    is the same as the conversation title in the database. Each conversation has a title which
+    consists of both the usernames (in alphabetical order) separated by a '&'. The expected result
+    is that the title matched the database which confirms that the conversation was created.
+     */
+    @Test
+    public void testIfUserCanCreateConversation() {
+
+        final EditText username = (EditText) createConvoActivity.findViewById(R.id.recipients_username);
+        username.setText("englishUser");
+
+        String message = "Sending a unique message by creating a new conversation";
+        final EditText textToSend = (EditText) createConvoActivity.findViewById(R.id.convo_body);
+        textToSend.setText(message);
+
+        Button button = (Button) createConvoActivity.findViewById(R.id.send_button);
+        button.performClick();
+
+        String currentUser = auth.getCurrentUser().getDisplayName();
+        String[] usernames = new String[] {currentUser, "englishUser"};
+        Arrays.sort(usernames);
+
+        String title = usernames[0] + " & " + usernames[1];
+
+        db.collection("conversations").whereEqualTo("title", title).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    assert true;
+                }
+            }
+        });
+
+    }
+
+    // After test set createConvoActivity instance to null
+    @After
+    public void tearDown() throws Exception {
+        createConvoActivity = null;
+    }
+}
+```
+
+&nbsp;
 
 # Building the Software
 1. Open the application
@@ -262,7 +343,12 @@ public class FirebaseQueryTest {
 6. Create new contact based on user discretion 
 7. User will be directed back to the chat page 
 
+&nbsp;
+
 # Working Software and The State of the UI 
+Enter text here
+
+&nbsp;
 
 # Implemented Function 
 The functionalties that we have incorporated in to The Messaging Service consists of, 
