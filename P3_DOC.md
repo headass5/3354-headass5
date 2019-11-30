@@ -1,5 +1,5 @@
 # Implementation and Documentation
-Enter text here
+The implementaton and documentation, as well as the testing for our project can be found in this document. There are clear instructions for the different functionalities, as well as the test classes and test methods that were developed by each group member. If you would like to see the document of the project requirements, then click [here](./requirements.md)
 
 &nbsp;
 
@@ -334,14 +334,18 @@ public class CreateConvoActivityTest {
 &nbsp;
 
 # Building the Software
-1. Open the application
-2. Click on button at the bottom of the screen to create an account
-3. Enter username and password that will be used as credentials for a specific user 
-4. Enter username and password created to access chat account 
-5. User will be directed to chat page
-6. Allow user to enter language based on user perference  
-6. Create new contact based on user discretion 
-7. User will be directed back to the chat page 
+This application builds and runs on any android compatible device. There are no issues with the app, and it should run as expected. Here are some basic steps on getting familiar with building and using the software:
+
+1. Open the application, download the APK file.
+2. Click on button at the bottom of the screen to create an account.
+3. Enter username, email, password details.
+4. Enter what language you would like your text messages to be received in.
+6. Choose a profile picture and then click create account to log in.
+7. If you already have an account, you can log in with your credentials.
+8. Once you are logged in, you will be directed to the chats page.
+9. Create contacts by adding usernames of other contacts you know.
+10. Create conversations by either clicking on a contact, or on the conversation button.
+11. Send messages and verify that your received messaged are in your translated text.
 
 &nbsp;
 
