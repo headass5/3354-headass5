@@ -88,7 +88,7 @@ public class FirebaseQuery extends AppCompatActivity {
     }).start();
   }
   
-  static void createConversation(final String text, final String username, final CreateConvoActivity.UserEmailHandler addHandler) {
+  static void createConversation(final String username, final CreateConvoActivity.UserEmailHandler addHandler) {
     final Thread addConvo = new Thread(new Runnable() {
       @Override
       public void run() {
@@ -114,9 +114,6 @@ public class FirebaseQuery extends AppCompatActivity {
               otherDocument.getId(),
               docID);
           addHandler.sendEmptyMessage(Constants.CONVO_CREATED);
-          
-//          addMessages(docID, currentUserId, text);
-//          addHandler.sendEmptyMessage(Constants.MESSAGE_CREATED);
           
         } catch (InterruptedException | ExecutionException e) {
           System.out.println("Create Contact exception");

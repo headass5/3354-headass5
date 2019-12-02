@@ -6,11 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".AddContact">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/bar_layout" />
 
-    <Button
+  <androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar2"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@drawable/gradient_bg_no_radius"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="?attr/actionBarTheme"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="128dp"
+      android:text="New Contact"
+      android:textColor="@color/common_google_signin_btn_text_dark_default"
+      android:textSize="36sp"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+  </androidx.appcompat.widget.Toolbar>
+
+  <Button
         android:id="@+id/create_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,13 +45,15 @@
 
   <EditText
     android:id="@+id/new_contact_username"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginTop="256dp"
+    android:layout_marginStart="32dp"
+    android:layout_marginTop="64dp"
+    android:layout_marginEnd="32dp"
     android:ems="10"
     android:hint="@string/enter_username"
     android:inputType="textEmailAddress"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+    app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
