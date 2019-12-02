@@ -4,29 +4,13 @@ The implementaton and documentation, as well as the testing for our project can 
 &nbsp;
 
 # Design Pattern 
-The design pattern that headass followed for This Messaging Service was the Composite Design Pattern.
+The design pattern that headass followed for This Messaging Service was the **Composite Design Pattern.**
 The Composite Design Pattern allows for less duplication and clean interface.
 It is easy to add, remove, new types. Additionally, the traverse and display operations is uniform for internal nodes and leaves. 
 The Composite Design Pattern that is used in the code extends to the viewholder class, it is responsible for finding images and titles and setting its own variables (this can be seen in the both the conversation and contact). It gets passed to the same adapter class.  
 
-#ConversionAdapter: Example 1
+### ConversionAdapter: Example 1
 ```Java
-package com.aahlad.thismessagingservice.Adapter;
-
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import com.aahlad.thismessagingservice.MessageActivity;
-import com.aahlad.thismessagingservice.Model.Conversation;
-import com.aahlad.thismessagingservice.R;
-
-import java.util.List;
-
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
     private Context mContext;
     private List<Conversation> mConversations;
@@ -76,24 +60,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     }
 }
 ```
-#MessageAdapter: Example 2
+### MessageAdapter: Example 2
 ```Java 
-package com.aahlad.thismessagingservice.Adapter;
-
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import com.aahlad.thismessagingservice.Model.Chat;
-import com.aahlad.thismessagingservice.R;
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
@@ -168,28 +136,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 }
 ```
-#UserAdapter: Example 3
+### UserAdapter: Example 3
 ```Java
-package com.aahlad.thismessagingservice.Adapter;
-
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.aahlad.thismessagingservice.MessageActivity;
-import com.aahlad.thismessagingservice.Model.User;
-import com.aahlad.thismessagingservice.R;
-import com.bumptech.glide.Glide;
-
-import java.util.List;
-
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
@@ -246,8 +194,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 }
 ```
-
-
 
 &nbsp;
 
@@ -587,7 +533,27 @@ This application builds and runs on any android compatible device. There are no 
 &nbsp;
 
 # Working Software and The State of the UI 
-Enter text here
+All of the software works as expected for this application. Here are the different aspects of the UI:
+- Login Page
+  - Fields for email and password if you have an existing account
+  - Button to login to account
+  - Button to create and register for an account if you don't already have one
+- Register Page
+  - Fields for username, email, password, and language
+  - Can upload a profile picture
+  - Language is the language you want the messages to be received in
+- Main Page
+  - Splits the screen into two sections, contacts and chats
+  - Displays your username
+  - Button for logout
+- Chats Page
+  - Layout of all the different conversations you have
+  - Each conversation is titled with the username of the two people in the conversation
+  - Button that leads you to a page where you can enter in the username of someone you want to text
+- Contacts Page
+  - Layout of all the different contacts you have
+  - Each contact is titled with the contact username
+  - Button that allows you to enter a username to add that person as a contact
 
 &nbsp;
 
