@@ -9,8 +9,245 @@ The Composite Design Pattern allows for less duplication and clean interface.
 It is easy to add, remove, new types. Additionally, the traverse and display operations is uniform for internal nodes and leaves. 
 The Composite Design Pattern that is used in the code extends to the viewholder class, it is responsible for finding images and titles and setting its own variables (this can be seen in the both the conversation and contact). It gets passed to the same adapter class.  
 
-#Code location
-#insert here
+#ConversionAdapter: Example 1
+```Java
+package com.aahlad.thismessagingservice.Adapter;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.aahlad.thismessagingservice.MessageActivity;
+import com.aahlad.thismessagingservice.Model.Conversation;
+import com.aahlad.thismessagingservice.R;
+
+import java.util.List;
+
+public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
+    private Context mContext;
+    private List<Conversation> mConversations;
+
+    public ConversationAdapter(Context mContext, List<Conversation> mConversations) {
+        this.mConversations = mConversations;
+        this.mContext = mContext;
+    }   
+@NonNull
+    @Override
+    public ConversationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.conversation_item, parent, false);
+        return new ConversationAdapter.ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ConversationAdapter.ViewHolder holder, int position) {
+        final Conversation conversation = mConversations.get(position);
+        // Set text
+        holder.title.setText(conversation.getTitle());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              System.out.println("On Click");
+              Intent intent = new Intent(mContext, MessageActivity.class);
+              System.out.println(conversation.getId());
+              intent.putExtra("conversationID", conversation.getId());
+              mContext.startActivity(intent);
+            }
+        });
+    }
+@Override
+    public int getItemCount() {
+        return mConversations.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView title;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            title = itemView.findViewById(R.id.conversation_title);
+        }
+    }
+}
+```
+#MessageAdapter: Example 2
+```Java 
+package com.aahlad.thismessagingservice.Adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.aahlad.thismessagingservice.Model.Chat;
+import com.aahlad.thismessagingservice.R;
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
+
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+
+    public static final int MSG_TYPE_LEFT = 0;
+    public static final int MSG_TYPE_RIGHT = 1;
+
+    private Context mContext;
+    private List<Chat> mChat;
+    private String imageurl;
+    private String language;
+    
+    FirebaseUser fuser;
+
+    public MessageAdapter(Context mContext, List<Chat> mChat, String imageurl, String language) {
+        this.mChat = mChat;
+        this.mContext = mContext;
+        this.imageurl = imageurl;
+        this.language = language;
+    }
+ @NonNull
+    @Override
+    public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == MSG_TYPE_RIGHT) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_right, parent, false);
+            return new MessageAdapter.ViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_left, parent, false);
+            return new MessageAdapter.ViewHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
+
+        Chat chat = mChat.get(position);
+
+        holder.show_message.setText(chat.getTranslations().get(language));
+
+        if(imageurl.equals("default")) {
+            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
+        } else {
+            Glide.with(mContext).load(imageurl).into(holder.profile_image);
+        }
+    }
+  @Override
+    public int getItemCount() {
+        return mChat.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView show_message;
+        public ImageView profile_image;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            show_message = itemView.findViewById(R.id.show_message);
+            profile_image = itemView.findViewById(R.id.profile_image);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+        if(mChat.get(position).getUserID().equals(fuser.getUid())) {
+            return MSG_TYPE_RIGHT;
+        } else {
+            return MSG_TYPE_LEFT;
+        }
+    }
+}
+```
+#UserAdapter: Example 3
+```Java
+package com.aahlad.thismessagingservice.Adapter;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.aahlad.thismessagingservice.MessageActivity;
+import com.aahlad.thismessagingservice.Model.User;
+import com.aahlad.thismessagingservice.R;
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+
+    private Context mContext;
+    private List<User> mUsers;
+
+    public UserAdapter(Context mContext, List<User> mUsers) {
+        this.mUsers = mUsers;
+        this.mContext = mContext;
+    }
+ @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false);
+        return new UserAdapter.ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        final User user = mUsers.get(position);
+        holder.username.setText(user.getUsername());
+        if(user.getImageURL().equals("default")) {
+            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
+        } else {
+            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, MessageActivity.class);
+                intent.putExtra("otherUserID", user.getId());
+                intent.putExtra("otherUsername", user.getUsername());
+                intent.putExtra("otherImageURL", user.getImageURL());
+                mContext.startActivity(intent);
+            }
+        });
+    }
+ @Override
+    public int getItemCount() {
+        return mUsers.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView username;
+        public ImageView profile_image;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            username = itemView.findViewById(R.id.login_email_field);
+            profile_image = itemView.findViewById(R.id.profile_image);
+        }
+    }
+}
+```
+
+
 
 &nbsp;
 
