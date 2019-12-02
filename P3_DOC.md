@@ -528,7 +528,7 @@ This application builds and runs on any android compatible device. There are no 
 8. Once you are logged in, you will be directed to the chats page.
 9. Create contacts by adding usernames of other contacts you know.
 10. Create conversations by either clicking on a contact, or on the conversation button.
-11. Send messages and verify that your received messaged are in your translated text.
+11. Send messages and verify that you are receiving messages in your translated text.
 
 &nbsp;
 
