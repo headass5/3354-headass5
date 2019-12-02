@@ -567,7 +567,18 @@ The functionalties that we have incorporated in to The Messaging Service consist
 6. allowing the user to access specific message chat 
 
 In terms of the UI the functionality behind it is very user friendly, it is easy to follow and allows the user to navigate
-through the application. It is very personalized and customizable to the users preference. 
+through the application. It is very personalized and customizable to the users preference.
+
+&nbsp;
+
+# App Images
+![](/images/demo_1.png)
+![](/images/demo_2.png)
+![](/images/demo_3.png)
+![](/images/demo_4.png)
+![](/images/demo_5.png)
+![](/images/demo_6.png)
+![](/images/demo_7.png)
 
 
 
