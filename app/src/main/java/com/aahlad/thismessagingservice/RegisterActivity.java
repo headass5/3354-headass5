@@ -120,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
   }
   
-  private void register(final String username, final String email, final String password, final String languageCode) {
+  public void register(final String username, final String email, final String password, final String languageCode) {
     Thread addUserThread = new Thread(new Runnable() {
       @Override
       public void run() {

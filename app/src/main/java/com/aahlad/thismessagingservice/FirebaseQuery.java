@@ -1,6 +1,8 @@
 package com.aahlad.thismessagingservice;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -15,7 +17,7 @@ import com.google.firebase.functions.HttpsCallableResult;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-public class FirebaseQuery {
+public class FirebaseQuery extends AppCompatActivity {
   private static FirebaseFirestore db = FirebaseFirestore.getInstance();
   private static FirebaseAuth auth = FirebaseAuth.getInstance();
   private static FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
@@ -46,7 +48,7 @@ public class FirebaseQuery {
     Tasks.await(db.collection(Constants.CONVERSATIONS_PATH).document(docID).set(convoData));
   }
 
-  private static Task<Object> translateMessage(final String text, final String originalLanguage){
+  public static Task<Object> translateMessage(final String text, final String originalLanguage){
     Map<String, String> data = new HashMap<>();
     data.put("originalText", text);
     data.put("fromLanguage", originalLanguage);
