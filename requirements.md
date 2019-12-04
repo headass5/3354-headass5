@@ -8,11 +8,8 @@ MMS: Multimedia Messaging Service
 ## Functional Requirements
 1. The System will allow users to send messages in a 1:1 conversation
    * 1.1. The user will be able to translate received messages into their desired language.
-   * 1.2. The user sending the body will be able to see when the body is delivered.
-   * 1.3. The user sending the body will be able to see when the body is read.
-   * 1.4. The time stamps for each body will be shown in the conversation.
-   * 1.5. The users meesages will be stored in the database locally
-   * 1.6. Messages will be stored in the database so they will be persisted when logged out
+   * 1.2. The users meesages will be stored in the database locally
+   * 1.3. Messages will be stored in the database so they will be persisted when logged out
    
 2. The user should be able to login/logout account
    * 2.1. Existing users will be able to log into their account.
@@ -20,7 +17,7 @@ MMS: Multimedia Messaging Service
    
 3. The System will allow users to view all their conversations
    * 3.1. The user will be able to view a list of all their conversations and click on certain ones.
-   * 3.2. The user will be able to delete certain conversations.
+   * 3.2. The user will be able to add contacts and have conversations with those contacts
    * 3.3. The user will be able to create a new conversation.
    
 4. A translation service in order to power on demand translations
@@ -31,6 +28,9 @@ MMS: Multimedia Messaging Service
 	* 5.1. The system will authorize users credentials
 	* 5.2. The system will be able to manage the user’s information
 	* 5.3. The system will be able to delete the user's information
+    * 5.4. The system will ask the user what language they want their messages to be translated to
+    * 5.5. The user will be able to load a profile picture
+    * 5.6. The user will be able to create a username
 
 
 ## Non-functional Requirements
